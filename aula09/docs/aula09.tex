@@ -1,0 +1,209 @@
+% Parâmetros documentclass:
+% [t] - Alinha o conteúdo no topo dos slides
+% [aspectratio=169] - Define proporção de tela em 16:9
+% [draft] - Modo rascunho (não compila imagens, acelera compilação)
+% [handout] - Formato para impressão (múltiplos slides por página)
+% {beamer} - Classe para criação de apresentações
+\documentclass[t, handout, xcolor=table, aspectratio=169]{beamer}
+\usetheme{CambridgeUS}
+
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{multicol}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\lstdefinestyle{cstyles}{
+language=C,
+backgroundcolor=\color{backcolour},
+commentstyle=\color{codegreen},
+keywordstyle=\color{magenta},
+numberstyle=\tiny\color{codegray},
+stringstyle=\color{codepurple},
+basicstyle=\ttfamily\footnotesize,
+breakatwhitespace=false,
+breaklines=true,
+captionpos=b,
+keepspaces=true,
+numbers=left,
+numbersep=5pt,
+showspaces=false,
+showstringspaces=false,
+showtabs=false,
+tabsize=2,
+extendedchars=true,
+literate=
+  {&&}{{\&\&}}2
+{||}{{||}}2
+{!=}{{$\neq$}}2
+{==}{{==}}2
+{->}{$\rightarrow$}2
+{<=}{{$\leq$}}2
+{>=}{{$\geq$}}2
+{á}{{\'a}}1
+{ã}{{\~a}}1
+{à}{{\`a}}1
+{â}{{\^a}}1
+{é}{{\'e}}1
+{ê}{{\^e}}1
+{í}{{\'i}}1
+{ó}{{\'o}}1
+{õ}{{\~o}}1
+{ô}{{\^o}}1
+{ú}{{\'u}}1
+{*}{{$^*$}}1
+{ç}{{\c{c}}}1
+}
+
+\title{Aplicação de HASH e Filtro de Bloom}
+\subtitle{Busca de Números Primos}
+
+\institute{UFERSA}
+\author{Prof. Kennedy Lopes}
+\date{\today}
+
+\newcounter{meucontador} % Cria o contador "meucontador"
+\newcommand{\novoitem}{\refstepcounter{meucontador}\arabic{meucontador}}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\newcommand{\addsection}[2]{\section{#1}\input{#2}}
+\newcommand{\addsubsection}[2]{\subsection{#1}\input{#2}}
+
+\begin{frame}
+  \frametitle{Proposta}
+  Um sistema embarcado possui pouca memória e precisa responder rapidamente consultas sobre números primos.
+  Objetivos:
+  \begin{itemize}
+    \item Gerar os números primos até \texttt{$MAX\_PRIMO=1000$};
+    \item Inserir os primos no filtro de Bloom;
+    \item Consutar inteiros;
+    \item Informar sobre o resultado probabilístico.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Crivo de Erastóstenes}
+
+  O método consiste em listar todos os números naturais a partir do 2 até o valor limite desejado e seguir um passo a passo progressivo:
+  \begin{enumerate}
+    \item O primeiro número primo é o 2. Ele é o primeiro número primo. Eliminar múltiplos do 2
+    \item Mantém-se o 2, mas riscam-se todos os seus múltiplos (4, 6, 8, 10, etc.).
+    \item O próximo número não riscado após o 2 é o 3, que também é primo.Eliminar múltiplos do 3;
+    \item Mantém-se o 3 e riscam-se todos os seus múltiplos restantes (9, 15, 21, etc.).
+    \item Repete-se o processo para o próximo número não riscado (o 5, depois o 7, e assim por diante).
+    \item Quando se atinge um número cujo quadrado é maior que o limite da tabela, todos os números restantes que não foram riscados são primos.
+  \end{enumerate}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Geração dos primos}
+  \begin{multicols}{2}
+    \lstinputlisting[style=cstyles, numbers=none, frame=shadowbox, basicstyle=\ttfamily\small]{../codes/geracaoPrimos.c}
+  \end{multicols}
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Estrutura do Filtro}
+
+  \begin{itemize}
+    \item \texttt{struct} contendo um vetor de bytes;
+    \item Cada byte pode guardar até 8 valores alvos de \emph{hash}.
+    \item Necessário indicar onde está cada valor;
+  \end{itemize}
+
+\end{frame}
+\begin{frame}
+  \frametitle{Implementação}
+  \lstinputlisting[style=cstyles, numbers=none, frame=shadowbox, basicstyle=\ttfamily\tiny]{../codes/main.c}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Estrutura de Bytes}
+
+  \lstinputlisting[style=cstyles, numbers=none, frame=shadowbox, basicstyle=\ttfamily\tiny]{../codes/main.c}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Mapeando byte}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Mapeando bit}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Funções HASH}
+
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Ponteiros de Funções}
+
+
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Analisando filtro}
+
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Checando número primo}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Falso Positivos x Falsos Negativos}
+
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Otimizações}
+  Mater informações atualizadas como \emph{Falsos Positivos} e \emph{Taxa de ocupação do filtro}.
+  Parâmetros:
+  \begin{itemize}
+    \item \(n\): Número de bits
+    \item \(k\): Número de funções Hash
+    \item \(m\): Elementos Inseridos
+  \end{itemize}
+
+  Probabilidade de um bit permanecer \(0\) após n inserções:
+
+  \[P_0 = \left(1-\frac{1}{m}\right)^{kn} \approx e^{-kn/m}\]
+
+  Probabilidade de ser 1 após n inserções:
+
+  \[P_1 = 1 - P_0\]
+
+  Probabilidade de Falso positivos:
+
+  \[P_{fp} = P_1^k\]
+
+  Otimizando \(k\) mantendo \(m\) e \(n\) fixos:
+
+  $$k_{otimo} = \frac{m}{n} \ln(2)$$
+
+  Conhecendo o $k_{otimo}$, podemos dimensionar o filtro para os valores de \(m\) ou \(n\).
+\end{frame}
+
+\begin{frame}
+  \frametitle{Propondo estruturas}
+
+\end{frame}
+
+\end{document}
