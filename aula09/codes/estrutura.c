@@ -4,6 +4,8 @@
 #include <stdlib.h>
 
 int V[MAX] = {0};
+void primos();
+void eliminarMultiplos(int n);
 
 struct filtro_blooom {
   char bytes[NUM_BYTES];
@@ -11,9 +13,7 @@ struct filtro_blooom {
 
 struct filtro_blooom filtro;
 
-void primos();
 void consultarPrimo(int);
-void eliminarMultiplos(int n);
 int procurarByte(int x);
 int procurarBit(int x);
 int hash1(int);
@@ -21,9 +21,16 @@ int hash2(int);
 int hash3(int);
 void inserir(int, int, int (*f[])(int));
 
-int main(int argc, char *argv[]) { primos(); }
+int main(int argc, char *argv[]) {
+  int B = procurarByte(atoi(argv[1]));
+  int bit = procurarBit(atoi(argv[1]));
+  printf("Byte %d, bit %d\n", B, bit);
 
-int procurarByte(int x) { return x / 8; }
+  // primos();
+  // consultarPrimo(3);
+}
+
+int procurarByte(int x) { return (x / 8); }
 int procurarBit(int x) { return x % 8; }
 
 void inserir(int x, int hs, int (*f[])(int)) {
@@ -43,12 +50,21 @@ int hash3(int x) { return (5 * x + 11) % (NUM_BYTES * 8); }
 void consultarPrimo(int x) {
   int (*f[3])(int) = {hash1, hash2, hash3};
   int h[3] = {0};
+  int c = 0;
   for (int i = 0; i < 3; i++) {
     h[i] = f[i](x);
     int byte = procurarByte(h[i]);
     int bit = procurarBit(h[i]);
-    char b = filtro.bytes[byte];
-    //Construir a máscara para validar se o número é pimo.
+    char B = filtro.bytes[byte];
+    char novo = B & (1 << bit);
+    if (novo == (bit << 1)) {
+      c++;
+    }
+  }
+  if(c == 3){
+    printf("Quase certeza que é primo\n");
+  }else{
+    printf("De fato não é primo\n");
   }
 }
 
