@@ -1,5 +1,6 @@
+// https://github.com/kennedyufersa/bloom_filter
 #define MAX 1000000
-#define NUM_BYTES 32
+#define NUM_BYTES 16
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -8,7 +9,7 @@ void primos();
 void eliminarMultiplos(int n);
 
 struct filtro_blooom {
-  char bytes[NUM_BYTES];
+  unsigned short bytes[NUM_BYTES];
 };
 
 struct filtro_blooom filtro;
@@ -16,16 +17,21 @@ struct filtro_blooom filtro;
 void consultarPrimo(int);
 int procurarByte(int x);
 int procurarBit(int x);
+void mostrarFiltro();
 int hash1(int);
 int hash2(int);
 int hash3(int);
 void inserir(int, int, int (*f[])(int));
 
 int main(int argc, char *argv[]) {
-  int B = procurarByte(atoi(argv[1]));
-  int bit = procurarBit(atoi(argv[1]));
+  // Mapeando os bits
+  int x = atoi(argv[1]);
+  int B = procurarByte(x);
+  int bit = procurarBit(x);
   printf("Byte %d, bit %d\n", B, bit);
-
+  int (*f[3])(int) = {hash1, hash2, hash3};
+  inserir(x, 3, f);
+  mostrarFiltro();
   // primos();
   // consultarPrimo(3);
 }
@@ -33,6 +39,11 @@ int main(int argc, char *argv[]) {
 int procurarByte(int x) { return (x / 8); }
 int procurarBit(int x) { return x % 8; }
 
+void mostrarFiltro() {
+  for (size_t i = 0; i < NUM_BYTES; i++) {
+    printf("%2ld --> %d\n", i, filtro.bytes[i]);
+  }
+}
 void inserir(int x, int hs, int (*f[])(int)) {
   int h[hs];
   for (int i = 0; i < hs; i++) {
@@ -61,9 +72,9 @@ void consultarPrimo(int x) {
       c++;
     }
   }
-  if(c == 3){
+  if (c == 3) {
     printf("Quase certeza que é primo\n");
-  }else{
+  } else {
     printf("De fato não é primo\n");
   }
 }
