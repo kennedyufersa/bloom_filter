@@ -26,7 +26,6 @@ void inserir(int, int, int (*f[])(int));
 
 int main(int argc, char *argv[]) {
   int x = 28;
-  convertToBits(x);
   int (*f[3])(int) = {hash1, hash2, hash3};
   inserir(x, 3, f);
   mostrarFiltro();
@@ -39,7 +38,7 @@ int procurarBit(int x) { return x % 8; }
 
 void mostrarFiltro() {
   for (size_t i = 0; i < NUM_BYTES; i++) {
-    printf("%2ld --> %d --> ", i, filtro.bytes[i]);
+    printf("%2ld --> %3d --> ", i, filtro.bytes[i]);
     convertToBits(filtro.bytes[i]);
     printf("\n");
   }
@@ -59,7 +58,7 @@ int hash2(int x) { return (3 * x + 7) % (NUM_BYTES * 8); }
 int hash3(int x) { return (5 * x + 11) % (NUM_BYTES * 8); }
 
 void convertToBits(int x){
-  int aux = x;
+  int aux =   x;
   for(size_t i=0; i<8; i++){
     printf("%d", aux & 1);
     aux = aux >> 1;
